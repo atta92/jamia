@@ -107,7 +107,7 @@
                 @endif
             </div>
 
-            <div>
+            <div class="site-footer__col">
                 <p class="site-footer__heading">صفحات</p>
                 <ul class="site-footer__links">
                     <li><a href="{{ route('home') }}">صفحہ اول</a></li>
@@ -118,7 +118,7 @@
                 </ul>
             </div>
 
-            <div>
+            <div class="site-footer__col">
                 <p class="site-footer__heading">محتویات</p>
                 <ul class="site-footer__links">
                     <li><a href="{{ route('hadith.index') }}">احادیث</a></li>
@@ -128,7 +128,7 @@
                 </ul>
             </div>
 
-            <div>
+            <div class="site-footer__col">
                 <p class="site-footer__heading">فوری روابط</p>
                 <ul class="site-footer__links">
                     <li><a href="{{ url('/#prayer-timing') }}">اوقاتِ نماز</a></li>

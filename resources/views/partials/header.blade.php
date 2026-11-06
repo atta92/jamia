@@ -13,21 +13,21 @@
         ])
         data-scrolled="{{ $isSolid ? 'true' : 'false' }}"
         data-header-mode="{{ $isSolid ? 'solid' : 'overlay' }}">
-    <div class="page-shell flex items-center justify-between gap-3 {{ $isSolid ? 'py-2.5' : 'py-3' }}">
-        <a href="{{ $home }}" class="group flex min-w-0 items-center gap-2">
+    <div class="page-shell site-header__bar {{ $isSolid ? 'py-2.5' : 'py-3' }}">
+        <a href="{{ $home }}" class="site-brand-link group flex min-w-0 items-center gap-1.5 sm:gap-2">
             @if (! empty($site['logo']))
                 <img
                     src="{{ asset('storage/'.$site['logo']) }}"
                     alt="{{ $site['name'] ?? config('site.name') }}"
-                    class="h-9 w-auto max-w-[150px] object-contain"
+                    class="site-brand-img h-7 w-auto max-w-[96px] object-contain sm:h-9 sm:max-w-[150px]"
                 >
             @endif
-            <span class="site-brand site-brand--logo truncate transition-colors {{ $isSolid ? 'text-ink' : 'text-white' }}">
+            <span class="site-brand site-brand--logo transition-colors {{ $isSolid ? 'text-ink' : 'text-white' }}">
                 {{ $site['name'] ?? config('site.name') }}
             </span>
         </a>
 
-        <nav class="site-nav hidden items-center gap-6 text-[0.95rem] font-medium transition-colors lg:flex {{ $isSolid ? 'text-ink' : 'text-white/90' }}">
+        <nav class="site-nav hidden items-center justify-center gap-5 xl:gap-6 text-[0.95rem] font-medium transition-colors lg:flex {{ $isSolid ? 'text-ink' : 'text-white/90' }}">
             <a href="{{ $home }}" class="site-nav-link transition hover:text-gold-500">صفحہ اول</a>
             <a href="{{ $home }}#prayer-timing" class="site-nav-link transition hover:text-gold-500">اوقاتِ نماز</a>
             <div class="site-nav-dropdown relative">
@@ -112,7 +112,7 @@
             </div>
         </nav>
 
-        <div class="flex items-center gap-3">
+        <div class="site-header__actions flex items-center justify-end gap-3">
             <a href="{{ $home }}#prayer-timing"
                id="prayer-countdown"
                class="prayer-countdown"
