@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->string('muhtamim_facebook_url')->nullable()->after('muhtamim_photo');
+            $table->string('muhtamim_whatsapp')->nullable()->after('muhtamim_facebook_url');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('site_settings', function (Blueprint $table) {
+            $table->dropColumn(['muhtamim_facebook_url', 'muhtamim_whatsapp']);
+        });
+    }
+};
