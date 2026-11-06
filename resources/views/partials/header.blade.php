@@ -136,15 +136,18 @@
             <button type="button"
                     id="mobile-menu-btn"
                     @class([
-                        'inline-flex h-9 w-9 items-center justify-center rounded-md border transition lg:hidden',
+                        'mobile-menu-btn inline-flex h-9 w-9 items-center justify-center rounded-md border transition lg:hidden',
                         'border-ink/20 text-ink hover:bg-cream-100' => $isSolid,
                         'border-white/30 text-white' => ! $isSolid,
                     ])
                     aria-label="مینو کھولیں"
                     aria-expanded="false"
                     aria-controls="mobile-nav">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg class="mobile-menu-btn__icon mobile-menu-btn__icon--open h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                <svg class="mobile-menu-btn__icon mobile-menu-btn__icon--close h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/>
                 </svg>
             </button>
         </div>

@@ -368,9 +368,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (menuBtn && mobileNav) {
-        menuBtn.addEventListener('click', () => {
-            const open = mobileNav.classList.toggle('hidden') === false;
+        const setMobileMenuOpen = (open) => {
+            mobileNav.classList.toggle('hidden', !open);
             menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuBtn.setAttribute('aria-label', open ? 'مینو بند کریں' : 'مینو کھولیں');
+            document.body.classList.toggle('mobile-menu-open', open);
+            if (header) {
+                header.classList.toggle('is-menu-open', open);
+            }
+        };
+
+        menuBtn.addEventListener('click', () => {
+            const open = mobileNav.classList.contains('hidden');
+            setMobileMenuOpen(open);
+        });
+
+        mobileNav.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', () => setMobileMenuOpen(false));
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.matchMedia('(min-width: 1024px)').matches) {
+                setMobileMenuOpen(false);
+            }
         });
     }
 

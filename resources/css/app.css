@@ -4674,7 +4674,7 @@
 
 @media (max-width: 639.98px) {
     .site-brand--logo {
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         font-weight: 700;
         line-height: 1.15;
         white-space: normal;
@@ -4750,6 +4750,96 @@
 
 .site-header--overlay[data-scrolled='true'] #mobile-nav a:hover {
     background-color: var(--color-cream-100);
+}
+
+.mobile-menu-btn__icon--close {
+    display: none;
+}
+
+.mobile-menu-btn[aria-expanded='true'] .mobile-menu-btn__icon--open {
+    display: none;
+}
+
+.mobile-menu-btn[aria-expanded='true'] .mobile-menu-btn__icon--close {
+    display: block;
+}
+
+/* Mobile menu: scroll full item list inside the fixed header */
+@media (max-width: 1023.98px) {
+    #mobile-nav:not(.hidden) {
+        max-height: calc(100dvh - 3.75rem);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: color-mix(in oklab, var(--color-teal-800) 45%, transparent) transparent;
+        border-bottom-left-radius: 1.15rem;
+        border-bottom-right-radius: 1.15rem;
+        border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+        box-shadow: 0 18px 40px rgba(6, 46, 41, 0.18);
+    }
+
+    #mobile-nav:not(.hidden)::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    #mobile-nav:not(.hidden)::-webkit-scrollbar-track {
+        margin-block: 0.55rem;
+        background: transparent;
+    }
+
+    #mobile-nav:not(.hidden)::-webkit-scrollbar-thumb {
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--color-teal-800) 42%, transparent);
+    }
+
+    #mobile-nav:not(.hidden)::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in oklab, var(--color-teal-800) 68%, transparent);
+    }
+
+    .site-header--overlay:not([data-scrolled='true']) #mobile-nav:not(.hidden) {
+        scrollbar-color: color-mix(in oklab, #ffffff 45%, transparent) transparent;
+    }
+
+    .site-header--overlay:not([data-scrolled='true']) #mobile-nav:not(.hidden)::-webkit-scrollbar-thumb {
+        background: color-mix(in oklab, #ffffff 42%, transparent);
+    }
+
+    .site-header--overlay:not([data-scrolled='true']) #mobile-nav:not(.hidden)::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in oklab, #ffffff 65%, transparent);
+    }
+
+    #mobile-nav:not(.hidden) nav {
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+        font-size: 1.08rem;
+    }
+
+    #mobile-nav a {
+        border-bottom: 1px solid color-mix(in oklab, var(--color-ink) 8%, transparent);
+        border-radius: 0;
+        font-size: 1.08rem;
+        line-height: 1.45;
+    }
+
+    #mobile-nav a:last-child {
+        border-bottom: none;
+    }
+
+    .site-header--overlay:not([data-scrolled='true']) #mobile-nav a {
+        border-bottom-color: color-mix(in oklab, #ffffff 14%, transparent);
+    }
+
+    body.mobile-menu-open {
+        overflow: hidden;
+    }
+
+    body.mobile-menu-open .float-actions {
+        visibility: hidden;
+        pointer-events: none;
+    }
 }
 
 /* Hadith browse */
