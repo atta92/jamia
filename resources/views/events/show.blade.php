@@ -1,6 +1,37 @@
 @extends('layouts.public')
 
 @section('title', $event->title.' — '.($site['name'] ?? config('site.name')))
+@section('meta_description', \Illuminate\Support\Str::of($event->excerpt ?: $event->body ?: $event->title)->stripTags()->squish()->limit(160))
+@section('og_type', 'article')
+@section('og_image', $event->coverUrl() ?: '')
+
+@section('seo_json_ld')
+@php
+    $eventLd = array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Event',
+        'name' => $event->title,
+        'description' => \Illuminate\Support\Str::of($event->excerpt ?: $event->body ?: $event->title)->stripTags()->squish()->limit(160)->toString(),
+        'image' => $event->coverUrl() ?: null,
+        'startDate' => optional($event->starts_at)?->toAtomString(),
+        'endDate' => optional($event->ends_at)?->toAtomString(),
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'eventStatus' => 'https://schema.org/EventScheduled',
+        'location' => $event->location ? [
+            '@type' => 'Place',
+            'name' => $event->location,
+            'address' => $event->location,
+        ] : null,
+        'organizer' => [
+            '@type' => 'Organization',
+            'name' => $site['name'] ?? config('site.name'),
+            'url' => url('/'),
+        ],
+        'url' => url()->current(),
+    ]);
+@endphp
+<script type="application/ld+json">{!! json_encode($eventLd, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
+@endsection
 
 @section('content')
 <section class="evlp-hero">

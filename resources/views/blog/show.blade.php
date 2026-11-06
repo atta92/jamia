@@ -1,6 +1,37 @@
 @extends('layouts.public')
 
 @section('title', $post->title.' — '.($site['name'] ?? config('site.name')))
+@section('meta_description', \Illuminate\Support\Str::of($post->excerpt ?: $post->body)->stripTags()->squish()->limit(160))
+@section('og_type', 'article')
+@section('og_image', $post->coverUrl() ?: '')
+
+@section('seo_json_ld')
+@php
+    $articleLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $post->title,
+        'description' => \Illuminate\Support\Str::of($post->excerpt ?: $post->body)->stripTags()->squish()->limit(160)->toString(),
+        'image' => $post->coverUrl() ?: null,
+        'datePublished' => optional($post->published_at ?: $post->created_at)?->toAtomString(),
+        'dateModified' => optional($post->updated_at)?->toAtomString(),
+        'author' => [
+            '@type' => 'Organization',
+            'name' => $site['name'] ?? config('site.name'),
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => $site['name'] ?? config('site.name'),
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => ! empty($site['logo']) ? asset('storage/'.$site['logo']) : asset('images/logo-calligraphy.jpg'),
+            ],
+        ],
+        'mainEntityOfPage' => url()->current(),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode(array_filter($articleLd), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>
+@endsection
 
 @section('content')
 @php

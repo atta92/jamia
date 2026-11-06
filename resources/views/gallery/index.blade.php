@@ -1,6 +1,9 @@
 @extends('layouts.public')
 
-@section('title', ($type === 'video' ? 'ویڈیو یادگار' : 'تصویری یادگار') . ' — ' . ($site['name'] ?? config('site.name')))
+@section('title', ($type === 'video' ? 'ویڈیو یادگار' : 'تصویری یادگار').' — '.($site['name'] ?? config('site.name')))
+@section('meta_description', $type === 'video'
+    ? 'دارالعلوم پیر شہانی کی ویڈیو یادگار — تقریبات، تعلیم اور عبادت کے مناظر۔'
+    : 'دارالعلوم پیر شہانی کی تصویری یادگار — علم، تربیت اور اجتماعات کے منتخب مناظر۔')
 
 @section('content')
 @php

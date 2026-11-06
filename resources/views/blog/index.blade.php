@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'بلاگ — '.($site['name'] ?? config('site.name')))
+@section('meta_description', 'علمی مباحث، شرعی رہنمائی اور جامعہ کی زندگی سے متعلق تازہ مضامین۔')
 
 @section('content')
 <header class="page-hero">

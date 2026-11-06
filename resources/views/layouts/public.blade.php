@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', $site['name'] ?? config('site.name'))</title>
-    <meta name="description" content="{{ $site['short_description'] ?? config('site.short_description') }}">
+
+    @include('partials.seo')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
