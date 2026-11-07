@@ -7,29 +7,24 @@
     <div class="hadith-book-grid">
         @foreach ($books as $book)
             <a href="{{ route('hadith.book', $book) }}" class="hadith-book-card">
-                <div class="hadith-book-card__body">
+                <div class="hadith-book-card__head">
                     <h2 class="hadith-book-card__title font-display">
                         <span class="hadith-book-card__ur">{{ $book->titleUr() }}</span>
-                        @if ($book->book_name)
-                            <span class="hadith-book-card__dot" aria-hidden="true">·</span>
-                            <span class="hadith-book-card__en" dir="ltr" lang="en">{{ $book->book_name }}</span>
-                        @endif
                     </h2>
-
                     @if ($book->writer_name)
                         <p class="hadith-book-card__writer">{{ $book->writer_name }}</p>
                     @endif
+                </div>
 
-                    <div class="hadith-book-card__stats">
-                        <span class="hadith-book-card__stat">
-                            <span class="hadith-book-card__stat-num" dir="ltr">{{ number_format($book->chapters_count) }}</span>
-                            <span class="hadith-book-card__stat-label">ابواب</span>
-                        </span>
-                        <span class="hadith-book-card__stat">
-                            <span class="hadith-book-card__stat-num" dir="ltr">{{ number_format($book->hadiths_count) }}</span>
-                            <span class="hadith-book-card__stat-label">احادیث</span>
-                        </span>
-                    </div>
+                <div class="hadith-book-card__stats">
+                    <span class="hadith-book-card__stat">
+                        <span class="hadith-book-card__stat-num" dir="ltr">{{ number_format($book->chapters_count) }}</span>
+                        <span class="hadith-book-card__stat-label">ابواب</span>
+                    </span>
+                    <span class="hadith-book-card__stat">
+                        <span class="hadith-book-card__stat-num" dir="ltr">{{ number_format($book->hadiths_count) }}</span>
+                        <span class="hadith-book-card__stat-label">احادیث</span>
+                    </span>
                 </div>
 
                 <span class="hadith-book-card__cta">

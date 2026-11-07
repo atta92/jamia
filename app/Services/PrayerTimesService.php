@@ -382,8 +382,8 @@ class PrayerTimesService
 
         $prayers = [];
         foreach ($payload['timings'] as $row) {
-            // Jummah shares Dhuhr; Ishraq/Chasht are optional nawaafil windows.
-            if (in_array($row['key'], ['Jummah', 'Ishraq', 'Chasht'], true)) {
+            // Jummah shares Dhuhr slot — keep Ishraq/Chasht so the countdown advances after Fajr.
+            if ($row['key'] === 'Jummah') {
                 continue;
             }
 
@@ -442,6 +442,27 @@ class PrayerTimesService
 
         if ($now->gte($dhuhr)) {
             return $now->isFriday() ? 'Jummah' : 'Dhuhr';
+        }
+
+        // Between Fajr and Dhuhr: advance through Ishraq → Chasht when available.
+        $derived = $this->derivedSunnahTimings($apiTimings);
+
+        try {
+            if (! empty($derived['Chasht'])) {
+                $chasht = $this->todayAt($derived['Chasht'], $now);
+                if ($now->gte($chasht)) {
+                    return 'Chasht';
+                }
+            }
+
+            if (! empty($derived['Ishraq'])) {
+                $ishraq = $this->todayAt($derived['Ishraq'], $now);
+                if ($now->gte($ishraq)) {
+                    return 'Ishraq';
+                }
+            }
+        } catch (\Throwable) {
+            // fall through to Fajr
         }
 
         return 'Fajr';

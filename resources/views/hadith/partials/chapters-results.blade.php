@@ -12,10 +12,6 @@
                 <div class="hadith-chapter-card__body">
                     <h2 class="hadith-chapter-card__title font-display">
                         <span class="hadith-chapter-card__ur">{{ $chapter->titleUr() }}</span>
-                        @if ($chapter->chapter_english && $chapter->chapter_english !== $chapter->titleUr())
-                            <span class="hadith-chapter-card__dot" aria-hidden="true">·</span>
-                            <span class="hadith-chapter-card__en" dir="ltr" lang="en">{{ $chapter->chapter_english }}</span>
-                        @endif
                     </h2>
                 </div>
 

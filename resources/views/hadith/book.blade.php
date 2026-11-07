@@ -26,9 +26,10 @@
 </header>
 
 <section
-    class="hadith-browse page-fade-section bg-white pb-16 sm:pb-20"
+    class="hadith-browse page-fade-section pb-16 sm:pb-20"
     x-data="hadithSearch({ endpoint: @js(route('hadith.book', $book)), query: @js($search), placeholder: 'باب تلاش کریں…' })"
 >
+    <div class="page-cage" aria-hidden="true"></div>
     @include('partials.page-fade-icons')
     <div class="page-shell pt-5 sm:pt-6">
         <form class="hadith-search" role="search" @submit="onSubmit">

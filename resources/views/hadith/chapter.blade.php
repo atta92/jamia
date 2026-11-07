@@ -22,7 +22,7 @@
 </header>
 
 <section
-    class="hadith-browse page-fade-section bg-white pb-16 sm:pb-20"
+    class="hadith-browse hadith-browse--plain page-fade-section pb-16 sm:pb-20"
     x-data="hadithSearch({
         endpoint: @js(route('hadith.chapter', [$book, $chapter->chapter_number])),
         query: @js($search),
@@ -30,7 +30,6 @@
         typed: true,
     })"
 >
-    @include('partials.page-fade-icons')
     <div class="page-shell pt-5 sm:pt-6">
         <form class="hadith-search hadith-search--typed" role="search" @submit="onSubmit">
             <div class="hadith-search__group">
