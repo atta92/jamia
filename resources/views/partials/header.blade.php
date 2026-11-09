@@ -118,12 +118,17 @@
                class="prayer-countdown"
                data-prayer-countdown='@json($prayerCountdown ?? ["timezone" => "UTC", "prayers" => []])'
                aria-live="polite"
+               aria-busy="false"
                title="اگلی نماز کا باقی وقت">
                 <span class="prayer-countdown__icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="8.5"/>
                         <path d="M12 8v4.4l2.6 1.6"/>
                     </svg>
+                </span>
+                <span class="prayer-countdown__skeleton" aria-hidden="true">
+                    <span class="prayer-countdown__skeleton-line prayer-countdown__skeleton-line--label"></span>
+                    <span class="prayer-countdown__skeleton-line prayer-countdown__skeleton-line--time"></span>
                 </span>
                 <span class="prayer-countdown__body">
                     <span class="prayer-countdown__label">

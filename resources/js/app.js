@@ -456,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const labelEl = countdownEl.querySelector('[data-countdown-label]');
         const timeEl = countdownEl.querySelector('[data-countdown-time]');
         let schedule = { timezone: 'UTC', prayers: [] };
+        let loading = false;
 
         try {
             schedule = JSON.parse(countdownEl.dataset.prayerCountdown || '{}');
@@ -465,6 +466,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const pad = (value) => String(value).padStart(2, '0');
         const dayMs = 24 * 60 * 60 * 1000;
+
+        const setCountdownLoading = (isLoading) => {
+            loading = Boolean(isLoading);
+            countdownEl.classList.toggle('is-loading', loading);
+            countdownEl.setAttribute('aria-busy', loading ? 'true' : 'false');
+        };
 
         // Current prayer window + countdown to the next adhan
         const currentPrayerWindow = () => {
@@ -511,6 +518,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const tick = () => {
+            if (loading) {
+                return;
+            }
+
             const window = currentPrayerWindow();
             if (!window) {
                 if (labelEl) {
@@ -536,13 +547,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
+        countdownEl.setPrayerLoading = setCountdownLoading;
+
         countdownEl.setPrayerSchedule = (next) => {
             if (!next || !Array.isArray(next.prayers)) {
                 return;
             }
             schedule = next;
+            setCountdownLoading(false);
             tick();
         };
+
+        // Home prayer section auto-locates on boot — show timer skeleton immediately.
+        const prayerSectionEl = document.querySelector('[data-prayer-section]');
+        if (prayerSectionEl?.dataset.autoLocate === '1') {
+            const savedSource = localStorage.getItem('jamia.prayer.citySource') || 'auto';
+            const savedCity = localStorage.getItem('jamia.prayer.city');
+            const defaultCity = prayerSectionEl.dataset.defaultCity || '';
+            const needsLocate = savedSource !== 'manual'
+                || (savedCity && savedCity !== defaultCity);
+
+            if (needsLocate) {
+                setCountdownLoading(true);
+            }
+        }
 
         tick();
         setInterval(tick, 1000);
@@ -919,6 +947,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (locateBtn) {
                 locateBtn.disabled = loading;
             }
+
+            const headerCountdown = document.getElementById('prayer-countdown');
+            if (headerCountdown && typeof headerCountdown.setPrayerLoading === 'function') {
+                headerCountdown.setPrayerLoading(loading);
+            }
         };
 
         const closeCityMenu = () => {
@@ -1200,7 +1233,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (hasSaved && savedCity !== selectedCity) {
                 await loadCity(savedCity, { persist: false, source: 'auto' });
+                return;
             }
+
+            setLoading(false);
         };
 
         bootCity();
