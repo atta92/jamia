@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', 'رابطہ — '.($site['name'] ?? config('site.name')))
-@section('meta_description', 'دارالعلوم پیر شہانی سے رابطہ کریں — پتہ، فون، ای میل اور پیغام بھیجیں۔')
+@section('title', 'رابطہ - '.($site['name'] ?? config('site.name')))
+@section('meta_description', 'دارالعلوم پیر شہانی سے رابطہ کریں - پتہ، فون، ای میل اور پیغام بھیجیں۔')
 
 @section('content')
     @php

@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', $post->title.' — '.($site['name'] ?? config('site.name')))
+@section('title', $post->title.' - '.($site['name'] ?? config('site.name')))
 @section('meta_description', \Illuminate\Support\Str::of($post->excerpt ?: $post->body)->stripTags()->squish()->limit(160))
 @section('og_type', 'article')
 @section('og_image', $post->coverUrl() ?: '')

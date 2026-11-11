@@ -256,6 +256,7 @@ Alpine.data('hadithSearch', (config = {}) => {
                     if (window.Alpine?.initTree) {
                         window.Alpine.initTree(this.$refs.results);
                     }
+                    applyHadithPageHighlight();
                 }
 
                 if (syncHistory) {
@@ -286,9 +287,410 @@ Alpine.data('hadithSearch', (config = {}) => {
 });
 
 window.Alpine = Alpine;
+function escapeHtmlText(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function highlightPlainText(text, query, markClass = 'hadith-search-mark') {
+    const raw = String(text ?? '');
+    const q = String(query ?? '').trim();
+    if (!raw) {
+        return '';
+    }
+
+    const safe = escapeHtmlText(raw);
+    if (!q) {
+        return safe;
+    }
+
+    const safeQuery = escapeHtmlText(q);
+    if (!safeQuery) {
+        return safe;
+    }
+
+    const diacritics = '[\\u064B-\\u065F\\u0670\\u06D6-\\u06ED\\u0640\\u00A0\\s]*';
+    const flexible = escapeRegExp(safeQuery)
+        .split('')
+        .map((ch) => (ch.trim() === '' ? diacritics : `${ch}${diacritics}`))
+        .join('');
+
+    try {
+        const next = safe.replace(
+            new RegExp(flexible, 'giu'),
+            (match) => `<mark class="${markClass}">${match}</mark>`
+        );
+        if (next !== safe) {
+            return next;
+        }
+
+        const plain = escapeRegExp(safeQuery);
+        return safe.replace(
+            new RegExp(plain, 'giu'),
+            (match) => `<mark class="${markClass}">${match}</mark>`
+        );
+    } catch {
+        return safe;
+    }
+}
+
+function applyHadithPageHighlight() {
+    const params = new URLSearchParams(window.location.search);
+    const query = (params.get('hq') || params.get('q') || '').trim();
+    if (!query) {
+        return false;
+    }
+
+    const hash = window.location.hash || '';
+    const hn = (params.get('hn') || '').trim();
+    let target = null;
+
+    if (hash.startsWith('#hadith-')) {
+        target = document.querySelector(hash);
+    }
+    if (!target && hn) {
+        target = document.getElementById(`hadith-${hn}`);
+    }
+
+    const entries = target
+        ? [target]
+        : [
+            ...document.querySelectorAll('.hadith-entry'),
+            ...document.querySelectorAll('.hadith-hit'),
+        ];
+
+    if (!entries.length) {
+        return false;
+    }
+
+    const selectors = [
+        '.hadith-entry__heading-text',
+        '.hadith-entry__narrator',
+        '.hadith-entry__matan',
+        '.hadith-entry__meta',
+        '.hadith-hit__snippet',
+        '.hadith-hit__chapter',
+    ];
+
+    let anyMatch = false;
+
+    entries.forEach((entry) => {
+        let matched = false;
+
+        selectors.forEach((selector) => {
+            entry.querySelectorAll(selector).forEach((node) => {
+                if (node.dataset.hqHighlighted === '1') {
+                    return;
+                }
+
+                const original = node.textContent || '';
+                if (!original.trim()) {
+                    return;
+                }
+
+                const highlighted = highlightPlainText(original, query, 'hadith-search-mark');
+                if (highlighted === escapeHtmlText(original)) {
+                    return;
+                }
+
+                node.innerHTML = highlighted;
+                node.dataset.hqHighlighted = '1';
+                matched = true;
+                anyMatch = true;
+            });
+        });
+
+        if (matched || target === entry) {
+            entry.classList.add('is-search-hit');
+        }
+    });
+
+    const focusEntry = target || document.querySelector('.hadith-entry.is-search-hit');
+    if (focusEntry) {
+        window.requestAnimationFrame(() => {
+            focusEntry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    return anyMatch || Boolean(focusEntry);
+}
+
+Alpine.data('hadithBot', (config = {}) => {
+    const options = config || {};
+    const dockKey = 'jamia.hadithBot.docked';
+    const bookKey = 'jamia.hadithBot.book';
+    const modeKey = 'jamia.hadithBot.mode';
+    const books = Array.isArray(options.books) ? options.books : [];
+    const modeLabels = {
+        urdu: 'اردو',
+        arabic: 'عربی',
+        number: 'نمبر',
+    };
+    const modePlaceholders = {
+        urdu: 'اردو متن لکھیں…',
+        arabic: 'عربی متن لکھیں…',
+        number: 'حدیث نمبر…',
+    };
+
+    return {
+        endpoint: options.endpoint || '',
+        books,
+        selectedBook: null,
+        mode: 'urdu',
+        open: false,
+        docked: false,
+        query: '',
+        loading: false,
+        messages: [],
+        get modeLabel() {
+            return modeLabels[this.mode] || modeLabels.urdu;
+        },
+        get inputPlaceholder() {
+            if (!this.selectedBook) {
+                return 'پہلے کتاب منتخب کریں';
+            }
+
+            return modePlaceholders[this.mode] || modePlaceholders.urdu;
+        },
+        init() {
+            try {
+                this.docked = localStorage.getItem(dockKey) === '1';
+            } catch {
+                this.docked = false;
+            }
+
+            let savedMode = 'urdu';
+            try {
+                savedMode = localStorage.getItem(modeKey) || 'urdu';
+            } catch {
+                savedMode = 'urdu';
+            }
+            this.mode = ['urdu', 'arabic', 'number'].includes(savedMode) ? savedMode : 'urdu';
+
+            let savedSlug = '';
+            try {
+                savedSlug = localStorage.getItem(bookKey) || '';
+            } catch {
+                savedSlug = '';
+            }
+
+            const saved = books.find((book) => book.slug === savedSlug) || null;
+            if (saved) {
+                this.selectedBook = saved;
+                this.messages = [
+                    {
+                        role: 'bot',
+                        kind: 'text',
+                        text: `کتاب منتخب ہے: ${saved.title}۔ اب ${this.modeLabel} تلاش کریں۔`,
+                    },
+                ];
+            } else {
+                this.resetToBookPicker();
+            }
+        },
+        setMode(mode) {
+            if (!['urdu', 'arabic', 'number'].includes(mode)) {
+                return;
+            }
+            this.mode = mode;
+            try {
+                localStorage.setItem(modeKey, mode);
+            } catch {
+                // ignore
+            }
+            this.$nextTick(() => this.$refs.input?.focus());
+        },
+        resetToBookPicker() {
+            this.selectedBook = null;
+            this.query = '';
+            this.messages = [
+                {
+                    role: 'bot',
+                    kind: 'books',
+                    text: 'السلام علیکم! پہلے کتاب منتخب کریں، پھر اردو / عربی / نمبر سے تلاش کریں۔',
+                },
+            ];
+        },
+        selectBook(book) {
+            if (!book?.slug) {
+                return;
+            }
+
+            this.selectedBook = book;
+            try {
+                localStorage.setItem(bookKey, book.slug);
+            } catch {
+                // ignore
+            }
+
+            this.messages.push({
+                role: 'user',
+                kind: 'text',
+                text: book.title,
+            });
+            this.messages.push({
+                role: 'bot',
+                kind: 'text',
+                text: `${book.title} منتخب ہو گئی۔ اردو، عربی یا نمبر چنیں اور تلاش لکھیں۔`,
+            });
+            this.scrollToBottom();
+            this.$nextTick(() => this.$refs.input?.focus());
+        },
+        clearBook() {
+            try {
+                localStorage.removeItem(bookKey);
+            } catch {
+                // ignore
+            }
+            this.resetToBookPicker();
+            this.scrollToBottom();
+        },
+        toggleDock() {
+            this.docked = !this.docked;
+            if (this.docked) {
+                this.close();
+            }
+            try {
+                localStorage.setItem(dockKey, this.docked ? '1' : '0');
+            } catch {
+                // ignore
+            }
+        },
+        toggle() {
+            if (this.docked) {
+                return;
+            }
+            if (this.open) {
+                this.close();
+            } else {
+                this.open = true;
+                this.$nextTick(() => {
+                    if (this.selectedBook) {
+                        this.$refs.input?.focus();
+                    }
+                });
+            }
+        },
+        close() {
+            this.open = false;
+        },
+        scrollToBottom() {
+            this.$nextTick(() => {
+                const box = this.$refs.messages;
+                if (box) {
+                    box.scrollTop = box.scrollHeight;
+                }
+            });
+        },
+        escapeHtml(value) {
+            return escapeHtmlText(value);
+        },
+        highlightText(text, query) {
+            return highlightPlainText(text, query, 'hadith-bot__mark') || '-';
+        },
+        resultHref(item) {
+            return String(item?.url || '');
+        },
+        async submit() {
+            const q = this.query.trim();
+            if (!q || this.loading || !this.endpoint) {
+                return;
+            }
+
+            if (!this.selectedBook?.slug) {
+                this.messages.push({
+                    role: 'bot',
+                    kind: 'books',
+                    text: 'تلاش سے پہلے کتاب منتخب کریں۔',
+                });
+                this.scrollToBottom();
+                return;
+            }
+
+            this.messages.push({
+                role: 'user',
+                kind: 'text',
+                text: `${this.modeLabel}: ${q}`,
+            });
+            this.query = '';
+            this.loading = true;
+            this.scrollToBottom();
+
+            try {
+                const url = new URL(this.endpoint, window.location.origin);
+                url.searchParams.set('q', q);
+                url.searchParams.set('book', this.selectedBook.slug);
+                url.searchParams.set('type', this.mode);
+                url.searchParams.set('limit', '5');
+
+                const response = await fetch(url.toString(), {
+                    headers: {
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('search failed');
+                }
+
+                const data = await response.json();
+                const results = Array.isArray(data.results) ? data.results : [];
+                const usedQuery = String(data.q || q).trim();
+                const total = Number(data.total || results.length) || results.length;
+                const moreUrl = String(data.more_url || '');
+
+                if (!results.length) {
+                    this.messages.push({
+                        role: 'bot',
+                        kind: 'text',
+                        text: `${this.selectedBook.title} میں کوئی حدیث نہیں ملی۔ دوسرا لفظ یا نمبر آزمائیں۔`,
+                    });
+                } else {
+                    const shown = results.length;
+                    const label = total > shown
+                        ? `${this.selectedBook.title} میں کل ${total} نتیجہ - پہلے ${shown}:`
+                        : `${this.selectedBook.title} میں ${shown} نتیجہ ملا:`;
+
+                    this.messages.push({
+                        role: 'bot',
+                        kind: 'results',
+                        text: label,
+                        query: usedQuery,
+                        results,
+                        total,
+                        moreUrl: total > shown ? moreUrl : '',
+                    });
+                }
+            } catch (error) {
+                this.messages.push({
+                    role: 'bot',
+                    kind: 'text',
+                    text: 'تلاش ابھی ممکن نہیں۔ تھوڑی دیر بعد کوشش کریں۔',
+                });
+            } finally {
+                this.loading = false;
+                this.scrollToBottom();
+            }
+        },
+    };
+});
+
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyHadithPageHighlight();
+    window.setTimeout(() => applyHadithPageHighlight(), 120);
+    window.setTimeout(() => applyHadithPageHighlight(), 450);
+
     const header = document.getElementById('site-header');
     const menuBtn = document.getElementById('mobile-menu-btn');
     const mobileNav = document.getElementById('mobile-nav');
@@ -558,7 +960,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tick();
         };
 
-        // Home prayer section auto-locates on boot — show timer skeleton immediately.
+        // Home prayer section auto-locates on boot - show timer skeleton immediately.
         const prayerSectionEl = document.querySelector('[data-prayer-section]');
         if (prayerSectionEl?.dataset.autoLocate === '1') {
             const savedSource = localStorage.getItem('jamia.prayer.citySource') || 'auto';

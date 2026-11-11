@@ -15,8 +15,8 @@
     $contactCta = $hifz->contact_cta_label ?: 'مزید معلومات کے لیے رابطہ';
 @endphp
 
-@section('title', $pageTitle.' — '.($site['name'] ?? config('site.name')))
-@section('meta_description', \Illuminate\Support\Str::of($lead ?: ($site['short_description'] ?? ''))->stripTags()->squish()->limit(160)->toString() ?: 'مدرسہ حفظ القرآن — دارالعلوم پیر شہانی میں حفظِ قرآن کا خصوصی شعبہ۔')
+@section('title', $pageTitle.' - '.($site['name'] ?? config('site.name')))
+@section('meta_description', \Illuminate\Support\Str::of($lead ?: ($site['short_description'] ?? ''))->stripTags()->squish()->limit(160)->toString() ?: 'مدرسہ حفظ القرآن - دارالعلوم پیر شہانی میں حفظِ قرآن کا خصوصی شعبہ۔')
 @section('content')
 @include('partials.page-hero', [
     'kicker' => $kicker,

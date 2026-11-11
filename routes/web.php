@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HadithController;
 use App\Http\Controllers\HadithErrorReportController;
+use App\Http\Controllers\HadithSearchController;
 use App\Http\Controllers\HifzController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
@@ -23,6 +24,9 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::post('/contact', [PageController::class, 'storeContact'])->name('contact.store');
 Route::get('/hifz', HifzController::class)->name('hifz.show');
 Route::get('/api/prayer-times', PrayerTimesController::class)->name('api.prayer-times');
+Route::get('/api/hadith/search', HadithSearchController::class)
+    ->middleware('throttle:60,1')
+    ->name('api.hadith.search');
 
 Route::get('/gallery/photos', [GalleryController::class, 'photos'])->name('gallery.photos');
 Route::get('/gallery/videos', [GalleryController::class, 'videos'])->name('gallery.videos');
@@ -35,6 +39,7 @@ Route::get('/events/{slug}', [EventController::class, 'show'])->name('events.sho
 
 Route::get('/hadith', [HadithController::class, 'index'])->name('hadith.index');
 Route::get('/hadith/{book}', [HadithController::class, 'book'])->name('hadith.book');
+Route::get('/hadith/{book}/search', [HadithController::class, 'search'])->name('hadith.search');
 Route::get('/hadith/{book}/{chapter}', [HadithController::class, 'chapter'])
     ->whereNumber('chapter')
     ->name('hadith.chapter');

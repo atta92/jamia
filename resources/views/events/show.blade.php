@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', $event->title.' — '.($site['name'] ?? config('site.name')))
+@section('title', $event->title.' - '.($site['name'] ?? config('site.name')))
 @section('meta_description', \Illuminate\Support\Str::of($event->excerpt ?: $event->body ?: $event->title)->stripTags()->squish()->limit(160))
 @section('og_type', 'article')
 @section('og_image', $event->coverUrl() ?: '')

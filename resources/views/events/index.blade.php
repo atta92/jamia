@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'پروگرامات — '.($site['name'] ?? config('site.name')))
+@section('title', 'پروگرامات - '.($site['name'] ?? config('site.name')))
 @section('meta_description', 'دارالعلوم پیر شہانی کے آنے والے پروگرامات، تقریبات اور دینی اجتماعات۔')
 
 @section('content')

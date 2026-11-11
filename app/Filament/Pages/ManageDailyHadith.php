@@ -90,7 +90,7 @@ class ManageDailyHadith extends Page
                                 $set('filter_chapter_id', null);
                                 $set('daily_hadith_id', null);
                             })
-                            ->helperText('Start here — e.g. صحیح بخاری'),
+                            ->helperText('Start here - e.g. صحیح بخاری'),
 
                         Select::make('filter_chapter_id')
                             ->label('2. Chapter (باب)')
@@ -105,7 +105,7 @@ class ManageDailyHadith extends Page
                                     ->orderBy('chapter_number')
                                     ->get()
                                     ->mapWithKeys(fn (HadithChapter $chapter): array => [
-                                        $chapter->id => $chapter->chapter_number.' — '.$chapter->titleUr(),
+                                        $chapter->id => $chapter->chapter_number.' - '.$chapter->titleUr(),
                                     ])
                                     ->all();
                             })
@@ -266,6 +266,6 @@ class ManageDailyHadith extends Page
 
         $prefix = $chapterNo ? "باب {$chapterNo} · #{$number}" : "#{$number}";
 
-        return trim("{$prefix} — {$snippet}");
+        return trim("{$prefix} - {$snippet}");
     }
 }

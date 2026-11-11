@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', $chapter->titleUr().' — '.$book->titleUr().' — '.($site['name'] ?? config('site.name')))
-@section('meta_description', $book->titleUr().' — '.$chapter->titleUr().' کی احادیث۔')
+@section('title', $chapter->titleUr().' - '.$book->titleUr().' - '.($site['name'] ?? config('site.name')))
+@section('meta_description', $book->titleUr().' - '.$chapter->titleUr().' کی احادیث۔')
 
 @section('content')
 <header class="page-hero">

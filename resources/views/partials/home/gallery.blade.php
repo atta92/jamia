@@ -7,7 +7,7 @@
 @php
     $galleryKicker = $site['gallery_kicker'] ?: 'یادگار';
     $galleryTitle = $site['gallery_title'] ?: 'علم، تربیت اور کامیابی کے مناظر';
-    $galleryLead = $site['gallery_lead'] ?: 'جامعہ کی زندگی، تعلیم، عبادت اور اجتماعات کے منتخب مناظر — علم، ایمان اور خدمت کے سفر کی جھلک۔';
+    $galleryLead = $site['gallery_lead'] ?: 'جامعہ کی زندگی، تعلیم، عبادت اور اجتماعات کے منتخب مناظر - علم، ایمان اور خدمت کے سفر کی جھلک۔';
     $galleryCta = $site['gallery_cta'] ?: 'مزید دیکھیں';
 @endphp
 <section id="gallery" class="gallery-showcase relative overflow-hidden bg-cream-50 py-16 sm:py-20" aria-label="{{ $galleryKicker }}">

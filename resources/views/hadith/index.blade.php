@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', 'کتبِ حدیث — '.($site['name'] ?? config('site.name')))
-@section('meta_description', 'صحیح بخاری، مسلم اور دیگر کتبِ حدیث — ابواب اور احادیث تلاش کریں۔')
+@section('title', 'کتبِ حدیث - '.($site['name'] ?? config('site.name')))
+@section('meta_description', 'صحیح بخاری، مسلم اور دیگر کتبِ حدیث - ابواب اور احادیث تلاش کریں۔')
 
 @section('content')
 <header class="page-hero">

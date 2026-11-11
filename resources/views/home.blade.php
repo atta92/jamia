@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', ($site['name'] ?? config('site.name')).' — صفحہ اول')
+@section('title', ($site['name'] ?? config('site.name')).' - صفحہ اول')
 @section('meta_description', $site['short_description'] ?? config('site.short_description'))
 @section('og_type', 'website')
 

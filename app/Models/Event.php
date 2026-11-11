@@ -127,10 +127,10 @@ class Event extends Model
 
         if ($end && ! $end->isSameDay($start)) {
             if ($start->isSameMonth($end) && $start->isSameYear($end)) {
-                return $this->urDay($start).'–'.$this->urDay($end).' '.$this->urMonth($start).' '.$start->year;
+                return $this->urDay($start).'-'.$this->urDay($end).' '.$this->urMonth($start).' '.$start->year;
             }
 
-            return $this->formatUrDate($start).' – '.$this->formatUrDate($end);
+            return $this->formatUrDate($start).' - '.$this->formatUrDate($end);
         }
 
         return $this->formatUrDate($start);

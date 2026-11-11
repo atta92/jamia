@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
-@section('title', 'ہمارے بارے میں — '.($site['name'] ?? config('site.name')))
-@section('meta_description', 'دارالعلوم پیر شہانی کا تعارف، مشن، اساتذہ کرام اور فیضانِ نظر — عبادت، علم اور خدمت کا مرکز۔')
+@section('title', 'ہمارے بارے میں - '.($site['name'] ?? config('site.name')))
+@section('meta_description', 'دارالعلوم پیر شہانی کا تعارف، مشن، اساتذہ کرام اور فیضانِ نظر - عبادت، علم اور خدمت کا مرکز۔')
 
 @section('content')
     @php

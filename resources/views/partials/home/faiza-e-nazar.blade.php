@@ -73,8 +73,8 @@
         @foreach ($people as $person)
             <li>
                 {{ $person->name }}
-                @if (filled($person->title)) — {{ $person->title }} @endif
-                @if (filled($person->description)) — {{ $person->description }} @endif
+                @if (filled($person->title)) - {{ $person->title }} @endif
+                @if (filled($person->description)) - {{ $person->description }} @endif
             </li>
         @endforeach
     </ul>

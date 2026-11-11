@@ -1,4 +1,4 @@
-{{-- Cognition Hub–style faded line icons for inner page sections --}}
+{{-- Cognition Hub-style faded line icons for inner page sections --}}
 <div class="page-fade-icons" aria-hidden="true">
     <span class="page-fade-icons__item page-fade-icons__item--1">
         <span class="page-fade-icons__glyph">

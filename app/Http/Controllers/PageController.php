@@ -52,7 +52,7 @@ class PageController extends Controller
 
         $settings = SiteSetting::current();
         $to = $settings->email ?: config('mail.from.address');
-        $subject = $data['subject'] ?: ('رابطہ فارم — '.$data['name']);
+        $subject = $data['subject'] ?: ('رابطہ فارم - '.$data['name']);
 
         $body = implode("\n", array_filter([
             'نام: '.$data['name'],

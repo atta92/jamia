@@ -135,7 +135,7 @@ class SiteSetting extends Model
             'show_gallery_section' => true,
             'gallery_kicker' => 'یادگار',
             'gallery_title' => 'علم، تربیت اور کامیابی کے مناظر',
-            'gallery_lead' => 'جامعہ کی زندگی، تعلیم، عبادت اور اجتماعات کے منتخب مناظر — علم، ایمان اور خدمت کے سفر کی جھلک۔',
+            'gallery_lead' => 'جامعہ کی زندگی، تعلیم، عبادت اور اجتماعات کے منتخب مناظر - علم، ایمان اور خدمت کے سفر کی جھلک۔',
             'gallery_cta' => 'مزید دیکھیں',
             'show_blog_section' => true,
             'blog_kicker' => 'بلاگ',

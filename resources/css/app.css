@@ -6364,16 +6364,32 @@ a.site-footer__contact-value:hover {
     }
 }
 
-/* Floating WhatsApp + scroll top */
+/* Floating WhatsApp + scroll top + hadith bot */
 .float-actions {
     position: fixed;
-    inset-inline-end: 0.85rem;
     bottom: 1rem;
-    z-index: 60;
+    z-index: 90;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 0.45rem;
+}
+
+.float-actions--bot {
+    right: 0.85rem;
+    left: auto;
+    align-items: flex-end;
+    transition: right 0.22s ease;
+}
+
+.float-actions--bot.is-docked {
+    right: 0;
+    left: auto;
+}
+
+.float-actions--social {
+    left: 0.85rem;
+    right: auto;
+    align-items: flex-start;
 }
 
 .float-actions__btn {
@@ -6417,20 +6433,655 @@ a.site-footer__contact-value:hover {
     color: #fff;
 }
 
+.float-actions__btn--bot {
+    width: auto;
+    min-width: 2.45rem;
+    height: 2.65rem;
+    gap: 0;
+    padding: 0;
+    border-color: color-mix(in oklab, var(--color-teal-800) 28%, transparent);
+    background: var(--color-teal-800);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(11, 107, 94, 0.35);
+    animation: hadith-bot-pulse 2.4s ease-in-out infinite;
+    overflow: hidden;
+}
+
+.float-actions__btn--bot:hover,
+.float-actions__btn--bot.is-open {
+    background: var(--color-teal-950);
+    border-color: var(--color-teal-950);
+    color: #fff;
+    animation: none;
+}
+
+.hadith-bot__combined {
+    display: inline-flex;
+    align-items: stretch;
+    padding: 0;
+}
+
+.hadith-bot__main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 0 0.55rem 0 0.85rem;
+    font: inherit;
+    cursor: pointer;
+}
+
+.hadith-bot__dock--inline {
+    width: 2rem;
+    height: auto;
+    align-self: stretch;
+    margin: 0;
+    border: 0;
+    border-inline-start: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+}
+
+.hadith-bot__dock--inline:hover {
+    background: rgba(0, 0, 0, 0.16);
+    color: #fff;
+    transform: none;
+}
+
+.hadith-bot__dock--inline .hadith-bot__dock-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+}
+
+.float-actions__btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.float-actions__bot-close-icon {
+    display: none;
+}
+
+.float-actions__btn--bot.is-open .float-actions__bot-open-icon {
+    display: none;
+}
+
+.float-actions__btn--bot.is-open .float-actions__bot-close-icon {
+    display: block;
+}
+
+.float-actions__bot-label {
+    font-family: 'Cairo', 'Jameel Noori Nastaleeq', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+@keyframes hadith-bot-pulse {
+    0%,
+    100% {
+        box-shadow: 0 10px 24px rgba(11, 107, 94, 0.35);
+        transform: translateY(0);
+    }
+
+    50% {
+        box-shadow: 0 12px 28px rgba(11, 107, 94, 0.5);
+        transform: translateY(-2px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .float-actions__btn--bot {
+        animation: none;
+    }
+}
+
 .float-actions__btn[hidden] {
     display: none;
 }
 
+.hadith-bot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.hadith-bot__launcher {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: transform 0.22s ease;
+}
+
+.hadith-bot__dock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.hadith-bot__dock-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    display: block;
+}
+
+.hadith-bot__dock--peek {
+    width: 2.15rem;
+    height: 2.35rem;
+    border: 0;
+    border-radius: 999px 0 0 999px;
+    background: var(--color-teal-800);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(11, 107, 94, 0.28);
+}
+
+.hadith-bot__dock--peek:hover {
+    background: var(--color-teal-950);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.hadith-bot__panel {
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: calc(100% + 0.65rem);
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    width: min(92vw, 22.5rem);
+    height: min(70dvh, 28rem);
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 14%, transparent);
+    border-radius: 1.1rem;
+    background: #fbfaf6;
+    box-shadow: 0 18px 48px rgba(6, 46, 41, 0.2);
+}
+
+.hadith-bot__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    padding: 0.85rem 0.95rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-teal-800) 10%, transparent);
+    background: color-mix(in oklab, var(--color-teal-800) 8%, #fff);
+}
+
+.hadith-bot__title {
+    margin: 0;
+    color: var(--color-teal-950);
+    font-family: 'Cairo', 'Jameel Noori Nastaleeq', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.35;
+}
+
+.hadith-bot__subtitle {
+    margin: 0.15rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    line-height: 1.35;
+}
+
+.hadith-bot__bookbar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    padding: 0.45rem 0.85rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-teal-800) 10%, transparent);
+    background: color-mix(in oklab, var(--color-cream-50) 80%, white);
+}
+
+.hadith-bot__bookbar-label {
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.hadith-bot__bookbar-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--color-teal-950);
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hadith-bot__bookbar-change {
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-teal-800) 10%, white);
+    color: var(--color-teal-900);
+    padding: 0.2rem 0.55rem;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hadith-bot__bookbar-change:hover {
+    background: var(--color-teal-800);
+    color: #fff;
+}
+
+.hadith-bot__books {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.hadith-bot__book-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+}
+
+.hadith-bot__book-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 12%, transparent);
+    border-radius: 0.7rem;
+    background: #fff;
+    color: var(--color-teal-950);
+    padding: 0.45rem 0.4rem;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.hadith-bot__book-btn:hover,
+.hadith-bot__book-btn.is-active {
+    border-color: color-mix(in oklab, var(--color-teal-800) 35%, transparent);
+    background: color-mix(in oklab, var(--color-teal-800) 8%, white);
+    color: var(--color-teal-900);
+}
+
+.hadith-bot__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border: 0;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-teal-800) 8%, white);
+    color: var(--color-teal-900);
+    cursor: pointer;
+}
+
+.hadith-bot__close svg {
+    width: 0.95rem;
+    height: 0.95rem;
+}
+
+.hadith-bot__messages {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.85rem 0.85rem 0.55rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.hadith-bot__msg--user {
+    align-self: flex-start;
+}
+
+.hadith-bot__msg--bot {
+    align-self: stretch;
+}
+
+.hadith-bot__bubble {
+    margin: 0;
+    max-width: 100%;
+    padding: 0.65rem 0.8rem;
+    border-radius: 0.85rem;
+    background: #fff;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 10%, transparent);
+    color: var(--color-ink);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+.hadith-bot__msg--user .hadith-bot__bubble {
+    background: var(--color-teal-800);
+    border-color: var(--color-teal-800);
+    color: #fff;
+}
+
+.hadith-bot__bubble--loading {
+    color: var(--color-muted);
+    font-style: italic;
+}
+
+.hadith-bot__results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.hadith-bot__results-label {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.hadith-bot__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 0.8rem;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 12%, transparent);
+    background: #fff;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.hadith-bot__card:hover {
+    border-color: color-mix(in oklab, var(--color-teal-800) 28%, transparent);
+    background: color-mix(in oklab, var(--color-cream-50) 80%, white);
+}
+
+.hadith-bot__card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.hadith-bot__card-book {
+    color: var(--color-teal-900);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.hadith-bot__card-num {
+    color: var(--color-muted);
+    font-family: var(--font-counter);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.hadith-bot__card-snippet {
+    color: var(--color-ink);
+    font-size: 0.84rem;
+    line-height: 1.65;
+}
+
+.hadith-bot__mark,
+.hadith-search-mark {
+    padding: 0 0.15em;
+    border-radius: 0.25em;
+    background: #ffe08a;
+    color: #111;
+    font-weight: 800;
+    box-shadow: inset 0 -0.12em 0 rgba(214, 158, 0, 0.45);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.hadith-entry.is-search-hit {
+    outline: 3px solid #e2b93b;
+    outline-offset: 5px;
+    border-radius: 1rem;
+    background: color-mix(in oklab, #fff4cc 55%, white);
+    animation: hadith-search-hit 1.25s ease;
+}
+
+@keyframes hadith-search-hit {
+    0% {
+        box-shadow: 0 0 0 0 rgba(226, 185, 59, 0.65);
+    }
+
+    100% {
+        box-shadow: 0 0 0 14px rgba(226, 185, 59, 0);
+    }
+}
+
+.hadith-bot__card-cta {
+    color: var(--color-teal-800);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.hadith-bot__more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.15rem;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-teal-800) 8%, white);
+    color: var(--color-teal-900);
+    padding: 0.45rem 0.85rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.hadith-bot__more:hover {
+    background: var(--color-teal-800);
+    border-color: var(--color-teal-800);
+    color: #fff;
+}
+
+.hadith-search-summary {
+    margin: 0 0 1rem;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.hadith-hit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hadith-hit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 12%, transparent);
+    border-radius: 1rem;
+    background: #fff;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.hadith-hit:hover {
+    border-color: color-mix(in oklab, var(--color-teal-800) 30%, transparent);
+    background: color-mix(in oklab, var(--color-cream-50) 75%, white);
+}
+
+.hadith-hit__meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.hadith-hit__chapter {
+    color: var(--color-teal-900);
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.hadith-hit__num {
+    flex-shrink: 0;
+    color: var(--color-muted);
+    font-family: var(--font-counter);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.hadith-hit__snippet {
+    color: var(--color-ink);
+    font-size: 0.92rem;
+    line-height: 1.75;
+}
+
+.hadith-hit__cta {
+    color: var(--color-teal-800);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.hadith-hit.is-search-hit {
+    outline: 2px solid #e2b93b;
+    outline-offset: 3px;
+    background: color-mix(in oklab, #fff4cc 45%, white);
+}
+
+.hadith-bot__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    flex-shrink: 0;
+    padding: 0.65rem 0.75rem 0.75rem;
+    border-top: 1px solid color-mix(in oklab, var(--color-teal-800) 10%, transparent);
+    background: #fff;
+}
+
+.hadith-bot__modes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.3rem;
+}
+
+.hadith-bot__mode {
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 14%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-cream-50) 70%, white);
+    color: var(--color-teal-900);
+    padding: 0.28rem 0.35rem;
+    font: inherit;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.hadith-bot__mode.is-active {
+    border-color: var(--color-teal-800);
+    background: var(--color-teal-800);
+    color: #fff;
+}
+
+.hadith-bot__compose {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.hadith-bot__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: 1px solid color-mix(in oklab, var(--color-teal-800) 14%, transparent);
+    border-radius: 999px;
+    background: var(--color-cream-50);
+    color: var(--color-ink);
+    padding: 0.55rem 0.85rem;
+    font: inherit;
+    font-size: 0.88rem;
+    outline: none;
+}
+
+.hadith-bot__input:focus {
+    border-color: color-mix(in oklab, var(--color-teal-800) 35%, transparent);
+}
+
+.hadith-bot__send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-teal-800);
+    color: #fff;
+    cursor: pointer;
+}
+
+.hadith-bot__send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.hadith-bot__send svg {
+    width: 1rem;
+    height: 1rem;
+}
+
 @media (min-width: 768px) {
     .float-actions {
-        inset-inline-end: 1.15rem;
         bottom: 1.25rem;
         gap: 0.5rem;
+    }
+
+    .float-actions--bot {
+        right: 1.15rem;
+        left: auto;
+    }
+
+    .float-actions--bot.is-docked {
+        right: 0;
+    }
+
+    .float-actions--social {
+        left: 1.15rem;
+        right: auto;
     }
 
     .float-actions__btn {
         width: 2.65rem;
         height: 2.65rem;
+    }
+
+    .float-actions__btn--bot {
+        width: auto;
+        height: 2.85rem;
+        padding: 0;
+    }
+
+    .hadith-bot__main {
+        padding: 0 0.6rem 0 1rem;
+    }
+
+    .hadith-bot__panel {
+        width: 23rem;
+        height: min(72dvh, 30rem);
     }
 }
 

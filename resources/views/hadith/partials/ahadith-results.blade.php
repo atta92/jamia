@@ -13,7 +13,7 @@
                 );
                 $shareBody = collect([
                     $shareTitle,
-                    'Hadith International Number: '.($item->hadith_number ?: '—'),
+                    'Hadith International Number: '.($item->hadith_number ?: '-'),
                     $item->status ? 'Status: '.$item->status : null,
                     $item->heading_urdu ?: $item->heading_arabic ?: $item->heading_english,
                     $item->english_narrator ?: $item->urdu_narrator,
@@ -72,11 +72,11 @@
                     <div class="hadith-entry__meta">
                         <span>
                             <em>Hadith International Number:</em>
-                            {{ $item->hadith_number ?: '—' }}
+                            {{ $item->hadith_number ?: '-' }}
                         </span>
                         <span>
                             <em>Status:</em>
-                            {{ $item->status ?: '—' }}
+                            {{ $item->status ?: '-' }}
                         </span>
                     </div>
 

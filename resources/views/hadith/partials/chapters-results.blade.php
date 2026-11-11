@@ -18,10 +18,10 @@
                 <span class="hadith-chapter-card__meta" dir="ltr">
                     @if ($chapter->hadith_number_from !== null && $chapter->hadith_number_to !== null)
                         <span class="hadith-chapter-card__meta-num">{{ $chapter->hadith_number_from }}</span>
-                        <span class="hadith-chapter-card__meta-sep">–</span>
+                        <span class="hadith-chapter-card__meta-sep">-</span>
                         <span class="hadith-chapter-card__meta-num">{{ $chapter->hadith_number_to }}</span>
                     @else
-                        <span class="hadith-chapter-card__meta-num">—</span>
+                        <span class="hadith-chapter-card__meta-num">-</span>
                     @endif
                 </span>
 
